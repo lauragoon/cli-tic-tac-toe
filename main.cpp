@@ -123,8 +123,10 @@ void input()
     {
         cout << "You can't choose a square already written in." << endl;
         input();
+        return;
     }
-    else gameMatrix[inpRow][inpCol] = currPlayer;
+    
+    gameMatrix[inpRow][inpCol] = currPlayer;
 }
 
 char gameWon()
@@ -139,9 +141,23 @@ char gameWon()
         return gameMatrix[1][1];
     if ((gameMatrix[2][0] == gameMatrix[2][1] && gameMatrix[2][1] == gameMatrix[2][2]) || \
         (gameMatrix[0][2] == gameMatrix[1][2] && gameMatrix[1][2] == gameMatrix[2][2]))
-        return gameMatrix[2][0];
+        return gameMatrix[2][2];
 
-    return '-';
+    bool foundEmpty = false;
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (gameMatrix[i][j] == ' ')
+            {
+                foundEmpty = true;
+                break;
+            }
+        }
+    }
+    if (foundEmpty == false) return '-';
+
+    return ' ';
 }
 
 void switchPlayer()
@@ -169,10 +185,14 @@ int main()
             cout << "We have a WINNER! Congrats Player O" << endl;
             break;
         }
+        else if (gameWon() == '-')
+        {
+            cout << "We have a TIE!" << endl;
+            break;
+        }
         
         switchPlayer();
     }
 
-    system("pause");
     return 0;
 }
